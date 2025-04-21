@@ -25,7 +25,7 @@ Follow these steps if you have Rust and Cargo installed on your system.
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/Abhijit-Kadalli/ntfy-to-lsl.git
+   git clone https://github.com/Abhijit-Kadalli/ntfy2lsl.git
    cd ntfy-to-lsl
    ```
 

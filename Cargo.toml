@@ -6,7 +6,7 @@ edition = "2021"
 [dependencies]
 dotenv = "0.15.0"
 futures = "0.3.31"
-lsl = "0.1.0"
+lsl = { git = "https://github.com/labstreaminglayer/liblsl-rust", version = "0.1.1" }
 reqwest = { version = "0.12.15", features = ["blocking", "json"] }
 serde = { version = "1.0.219", features = ["derive"] }
 serde_json = "1.0.140"

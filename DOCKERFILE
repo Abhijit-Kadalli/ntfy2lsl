@@ -1,0 +1,30 @@
+FROM rust:latest
+
+# 1) Install dependencies
+RUN apt-get update && \
+    apt-get install -y pkg-config libssl-dev cmake
+
+# 2) Use /project as the working directory
+WORKDIR /project
+
+# 3) Copy the whole project from your current directory into /project
+COPY . .
+
+# 4) First, fetch dependencies (so the Boost headers exist locally)
+RUN cargo fetch
+
+# 5) Patch the PTHREAD_STACK_MIN check (using find in case the path changes)
+#    We replace:
+#      #if PTHREAD_STACK_MIN > 0
+#    with:
+#      #if defined(PTHREAD_STACK_MIN) && (PTHREAD_STACK_MIN > 0)
+#
+RUN find /usr/local/cargo/registry/src -name "thread_data.hpp" \
+    -exec sed -i 's|#if PTHREAD_STACK_MIN > 0|#if defined(PTHREAD_STACK_MIN) \&\& (PTHREAD_STACK_MIN > 0)|g' {} \; \
+    || echo "File not found; skipping patch"
+
+# 6) Finally, build your project
+RUN cargo build --release
+
+# Keep the container alive if someone runs it without overriding CMD
+CMD ["sh", "-c", "echo Build complete. Binary is available in /project/target/release && tail -f /dev/null"]

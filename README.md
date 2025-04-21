@@ -17,9 +17,15 @@ This bridge allows you to:
 
 ## Installation
 
+There are a few ways to build and run this application:
+
+### 1. Using Cargo (Standard Rust Build)
+
+Follow these steps if you have Rust and Cargo installed on your system.
+
 1. Clone this repository:
-   ```
-   git clone https://github.com/yourusername/ntfy-to-lsl.git
+   ```bash
+   git clone https://github.com/Abhijit-Kadalli/ntfy-to-lsl.git
    cd ntfy-to-lsl
    ```
 
@@ -29,22 +35,74 @@ This bridge allows you to:
    ```
 
 3. Build the application:
-   ```
+   ```bash
    cargo build --release
+   ```
+
+### 2. Using the Build Script (Linux)
+
+A convenience script `build.sh` is provided to automate dependency fetching (including the LSL library) and building the project on Linux systems.
+
+1. Clone the repository (if you haven't already):
+   ```bash
+   git clone https://github.com/Abhijit-Kadalli/ntfy-to-lsl.git
+   cd ntfy-to-lsl
+   ```
+
+2. Create the `.env` file as described above.
+
+3. Make the script executable and run it:
+   ```bash
+   chmod +x build.sh
+   ./build.sh
+   ```
+   This will build the release binary in the `target/release/` directory.
+
+### 3. Using Docker
+
+A `DOCKERFILE` is included for building a containerized version of the application. This is useful for ensuring a consistent build environment.
+
+1. Clone the repository (if you haven't already):
+   ```bash
+   git clone https://github.com/Abhijit-Kadalli/ntfy-to-lsl.git
+   cd ntfy-to-lsl
+   ```
+
+2. Create the `.env` file as described above.
+
+3. Build the Docker image:
+   ```bash
+   docker build -t ntfy-to-lsl .
    ```
 
 ## Usage
 
-Run the application:
+### Running the Binary (Cargo or Build Script)
 
+After building with Cargo or the build script, run the application from the project root:
+
+```bash
+./target/release/ntfy2lsl
 ```
-cargo run --release
+
+Alternatively, if you built with `cargo build` (without `--release`), use:
+```bash
+cargo run
+```
+
+### Running with Docker
+
+Run the application using the Docker image, making sure to pass the `.env` file:
+
+```bash
+docker run --rm --env-file .env ntfy-to-lsl
 ```
 
 The application will:
 1. Connect to the ntfy.sh "diskalerts" channel
 2. Create an LSL stream named "NtfyAlerts" with stream type "Notifications"
 3. Forward any received notifications to the LSL stream
+4. Automatically attempt to reconnect to the NTFY stream if the connection is lost.
 
 ## Configuration
 
